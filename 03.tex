@@ -1,251 +1,165 @@
-\chapter{\LaTeX の書き方}
-\label{chap:latex}
+\chapter{設計}
+\label{chap:sekkei}
 
-この章では、よく使う\LaTeX のコマンドを説明する。足りない部分はぐぐればだいたいわかると思う。最初に書いておくと、数式を書く方法は、ぼく自身使わなかったので書いていない。ぼくのいた研究室でごりごり数式をたくさん書く必要のあるひとは、研究の種類からするとあまり居ない気がする。
+本章ではハイパー楽譜システムの要件と設計について述べる。
 
-\section{主なコマンド}
+\newpage
 
-\subsection{章と節}
+\section{要件}
+前章で整理した楽譜の問題点を踏まえた上で、ハイパー楽譜システムの要件を整理する。
+\begin{enumerate}
+    \item 楽譜を簡単に編集できる\\
+    メモを取るような気軽さで楽譜を書くことができ、新規作成/既存楽譜の編集両方を簡単に行える。
+    \item メモなどの情報を自在に書ける\\
+    テキストで楽譜を記述でき、ハイパーテキストのようなフォーマットの中で楽譜以外の情報も一緒に管理できる。
+    \item ハイパーリンクを利用できる\\
+    楽譜上の要素やテキストに対してハイパーリンクを設定でき、関連情報に素早くアクセスできる。
+\end{enumerate}
+この要件を満たす楽譜システムは、ハイパーテキストの編集環境であるWikiと、テキストベースの楽譜記述言語の組み合わせによって実現できる。
 
-文書構造を明確にする大事なもの。目次はこれらのコマンドをもとに作られる。例えば、この第\ref{chap:latex}章の冒頭部分はこのようなソースで書かれている。
+\section{ハイパー楽譜システム}
+本研究で提案するハイパー楽譜システムの基本構成と使い方を解説する。
 
-\begin{itembox}[l]{{\tt 03.tex}}
-\begin{verbatim}
-\chapter{\LaTeX の書き方}
-\label{chap:latex}
+\subsection{基本構成}
+ハイパー楽譜システム(図\ref{hs})はWikiであるScrapbox\footnote{\textsf{https://scrapbox.io}}と、楽譜記述言語のABC記譜法\footnote{\textsf{http://abcnotation.com}}(以下ABC)によって構成されている。
 
-この章では、よく使う\LaTeX のコマンドを説明する。（略）
-
-\section{主なコマンド}
-
-\subsection{章と節}
-
-文書構造を明確にする大事なもの。目次はこれらのコマンドをもとに作られる。例えば、この第\ref{chap:latex}章の冒頭部分はこのようなソースで書かれている。
-\end{verbatim}
-\end{itembox}
-
-章は \verb|\chapter{見出し}|、節は \verb|\section{見出し}|、小節は \verb|\subsection{見出し}|、小々節は \verb|\subsubsection{見出し}| を使う。表\ref{tb:chap}に一覧する。
-
-\begin{table}[htbp]
-  \caption{章と節のコマンド}
-  \label{tb:chap}
-  \begin{center}\begin{tabular}{c|c}
-    \hline
-    コマンド&用途\\\hline\hline
-    \verb|\chapter{見出し}|&章\\\hline
-    \verb|\section{見出し}|&節\\\hline
-    \verb|\subsection{見出し}|&小節\\\hline
-    \verb|\subsubsection{見出し}|&小々節\\\hline
-    \end{tabular}\end{center}
-\end{table}
-
-\subsubsection{小々節見出しサンプルその1}
-
-小々節は上のように \verb|\subsubsection{タイトル}| で書けるけれど、あまり文書の階層構造が深いことは望ましくないので、多用しなければならないようなら文書構造を見直したほうがよいと思う。
-
-\subsubsection{小々節見出しサンプルその2}
-
-小々節は、章や節、小節のように {\tt N.N.N} といった番号ではなくて、括弧付きの番号で出力される。かつ、目次には出力されない。
-
-\subsection{図}
-
-図は次のように出力される（図\ref{fig:sample1}）。
-
-\begin{figure}[htbp]
-    \begin{center}
-       \fbox{\includegraphics[width=50mm]{image.eps}}
-    \end{center}
-    \caption{図の例}
-    \label{fig:sample1}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{images/hyperscore.png}
+    \caption{ハイパー楽譜システム上で書かれた楽譜}
+    \label{hs}
 \end{figure}
 
-ソースでは次のように記述している。
 
-\begin{itembox}[l]{{\tt 03.tex}}
-\begin{verbatim}
-図は次のように出力される（図\ref{fig:sample1}）。
+\paragraph*{Scrapbox}
+Scrapbox(図\ref{scrap})はGyazz\cite{Gyazz}をベースにして開発された、Nota\footnote{\textsf{https://www.notainc.com/ja}}社が運営しているWikiである。
+他のシステムには存在しない、ハイパー楽譜システムとして利用するのに最適な特徴を持つ。
 
-\begin{figure}[htbp]
-    \begin{center}
-       \fbox{\includegraphics[width=40mm]{image.eps}}
-    \end{center}
-    \caption{図の例}
-    \label{fig:sample1}
-\end{figure}
-\end{verbatim}
-\end{itembox}
+\begin{itemize}
+    \item シンプルで柔軟な記法をもつWYSIWYGエディタ
 
-\verb|\begin{figure}[htbp]|  の{\tt htbp}は、表示位置の優先順位の設定。基本的に\LaTeX では、図の挿入位置は強制的には指定できない。いくつか候補を指定しておくと、候補のなかの優先度の高い順に、図を入れられるスペースがあるかどうかを調べて、入れられればそこに、入れられなければ次の候補のスペースを調べる、という処理が行われる。{\tt h}はこのコマンドを書いたその場所に、{\tt t}はページの一番上に、{\tt b}はページの一番下に、{\tt p}は画像だけ別ページに、それぞれ配置する。基本的には{\tt htbp}のように全部書いておけば問題ない。
+    入力/改行/段落/箇条書きといった基本的なテキスト編集を見たまま行える。
+    またリンクやマルチメディアの埋め込みには\texttt{[]}記法のみで対応でき、他に様々な記法を覚える必要がない。
 
-\verb|\includegraphics| コマンドで、図のサイズと挿入するファイルを指定する。上の例ではサイズは {\tt width=50mm} として幅を指定したけれど、ここは他にも {\tt height=30mm} として高さを指定してもよいし、{\tt scale=0.5} として拡大率を指定してもよい。画像は最近の \LaTeX 環境であれば{\tt *.eps}以外でも使える。ただし、{\tt bb} (Bounding Box) として画像の大きさを指定する必要があることも多い。
-以下はJPEG画像を使用する例。
+    \begin{itembox}[l]{\texttt{[]}記法}
+        \begin{tabbing}
+            ********************************* \= ********************** \kill
+            \texttt{[ページ名]} \> 同一Wiki内ページへのリンク\\
+            \texttt{[URL]} \> 外部リンク\\
+            \texttt{[画像URL]} \> 画像埋め込み\\
+            \texttt{[音声URL]} \> 音声埋め込み\\
+            \texttt{[YouTube/VimeoURL]} \> 動画埋め込み\\
+            \texttt{[GoogleMapsURL]} \> 地図埋め込み
+        \end{tabbing}
+    \end{itembox}
 
-\begin{itembox}[l]{{\tt 03.tex}}
-\begin{verbatim}
-\begin{figure}[htbp]
-    \begin{center}
-       \fbox{\includegraphics[width=40mm,bb=0 0 640 480]{image.jpg}}
-    \end{center}
-    \caption{図の例}
-    \label{fig:sample1}
-\end{figure}
-\end{verbatim}
-\end{itembox}
+    \item 関連ページリスト
 
-bbの指定は、上記のように{\tt *.tex} ファイルの中で指定してもいいが、
-{\tt *.bb}ファイルを作っておく方法もある。
-ターミナルで{\tt ebb}コマンドを使用すると{\tt *.bb}ファイルを簡単に作れる。
+    Scrapboxページの下部には
+    \begin{itemize}
+        \item 別ページへのリンク
+        \item 別ページからのリンク
+        \item リンク先ページがリンクしているページ
+    \end{itemize}といった関連ページリスト(図\ref{related})が表示され、どのような情報と関連するのか一目瞭然に分かる。
 
+    \item リアルタイム共同編集
 
-\begin{itembox}[l]{ebbコマンドの例}
-\begin{verbatim}
-% ebb image.jpg
-\end{verbatim}
-\end{itembox}
+    Scrapboxでは複数人による共同編集だけでなく、Googleドキュメント\footnote{\textsf{https://www.google.com/intl/ja\_jp/docs/about}}のようなリアルタイム編集作業をコンフリクトすることなく行うことが可能である。
+\end{itemize}
 
-
-\verb|\includegraphics| を \verb|\fbox| に入れると、画像に枠を付けられる。
-
-\verb|\caption| コマンドで図の見出しを指定できる。図の見出しは、図の下に表記するので注意。ここで指定した見出しが、図の目次に表示される。
-
-\verb|\label| コマンドでは図の参照用ラベルを設定できる。本文中、\verb|\ref| コマンドで参照用ラベルを指定すると、対応した図の番号が自動的に挿入される。これも目次や参考文献と同様、最低二回のコンパイルが必要なので注意。
-
-図を二つ横に並べたい場合は、次のように書く（図\ref{fig:sample2}、図\ref{fig:sample3}）。
-
-\begin{figure}[htbp]
-  \begin{minipage}{0.5\hsize}
-    \begin{center}
-       \fbox{\includegraphics[width=40mm]{image.eps}}
-    \end{center}
-    \caption{図を並べる例1}
-    \label{fig:sample2}
-  \end{minipage}
-  \begin{minipage}{0.5\hsize}
-    \begin{center}
-       \includegraphics[width=40mm]{image.eps}
-    \end{center}
-    \caption{図を並べる例2、枠なし}
-    \label{fig:sample3}
-  \end{minipage}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{images/scrapbox.png}
+    \caption{Scrapboxの画面}
+    \label{scrap}
 \end{figure}
 
-\begin{itembox}[l]{{\tt 03.tex}}
-\begin{verbatim}
-図を二つ横に並べたい場合は、次のように書く（図\ref{fig:sample2}、図\ref{fig:sample3}）。
-
-\begin{figure}[htbp]
-  \begin{minipage}{0.5\hsize}
-    \begin{center}
-       \fbox{\includegraphics[width=40mm]{image.eps}}
-    \end{center}
-    \caption{図を並べる例1}
-    \label{fig:sample2}
-  \end{minipage}
-  \begin{minipage}{0.5\hsize}
-    \begin{center}
-       \fbox{\includegraphics[width=40mm]{image.eps}}
-    \end{center}
-    \caption{図を並べる例2}
-    \label{fig:sample3}
-  \end{minipage}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{images/related.png}
+    \caption{関連ページリスト}
+    \label{related}
 \end{figure}
-\end{verbatim}
-\end{itembox}
+
+\paragraph*{ABC}
+ABCはプレーンテキスト形式の楽譜記述言語で、\texttt{c}が「ド」を表すシンプルな記法(ソースコード\ref{abctext})を持つ。
+大規模で複雑な楽譜(図\ref{complex})の記述も可能で、幅広いシーンで利用可能である。
+利用者コミュニティ\footnote{\textsf{https://groups.yahoo.com/neo/groups/abcusers/info}}が活発でバージョンのアップデートが頻繁に行われていたり、ユーザーによる譜例が多く公開されていることから信頼できるフォーマットである。
+ブラウザからはJavaScriptライブラリのabcjs\footnote{\textsf{https://abcjs.net/}}が利用でき、既存の楽譜システムと比較しても遜色のない綺麗な楽譜を出力することが可能である。
+
+\begin{lstlisting}[caption=「ド」を表すABC, label=abctext]
+    c
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=2cm]{images/c.png}
+\caption{「ド」の譜例}
+\label{abcnote}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{images/complexabc.png}
+\caption{複雑な楽譜の例}
+\label{complex}
+\end{figure}
 
 
-\subsection{表}
+\subsection{使い方}
+\paragraph*{楽譜を書く}
+Scrapbox上で\texttt{code:*.abc}という行に続けてABCテキストを書くとABC記述の真上に楽譜画像が表示され(図\ref{editingabc})、楽譜を確認しながらリアルタイムに編集できる。
+楽譜やABCの領域外をクリックするとABC記述が隠れ、楽譜のみが表示される(図\ref{editedabc})。
 
-表は次のように出力される（表\ref{tb:sample1}）。
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{images/editingabc.png}
+\caption{編集中の楽譜}
+\label{editingabc}
+\end{figure}
 
-\begin{table}[htbp]
-  \caption{表の例}
-  \label{tb:sample1}
-  \begin{center}
-  \begin{tabular}{l|c|r}
-    \hline
-    種類	&味&評価\\\hline\hline
-    ドラ焼き&甘い&好き\\\hline
-    メロンパン&カリもふ&好き\\\hline
-    クリームパン&神&すごく好き\\\hline
-  \end{tabular}\end{center}
-\end{table}
-
-ソースでは次のようになっている。
-
-\begin{itembox}[l]{{\tt 03.tex}}
-\begin{verbatim}
-表は次のように出力される（表\ref{tb:sample1}）。
-
-\begin{table}[htbp]
-  \caption{表の例}
-  \label{tb:sample1}
-  \begin{center}
-  \begin{tabular}{l|c|r}
-    \hline
-    種類	&味&評価\\\hline\hline
-    ドラ焼き&甘い&好き\\\hline
-    メロンパン&カリもふ&好き\\\hline
-    クリームパン&神&すごく好き\\\hline
-  \end{tabular}\end{center}
-\end{table}
-\end{verbatim}
-\end{itembox}
-
-{\tt htbp}や \verb|\caption| と \verb|\label| は図と同様。ただし表のタイトルは表の上に書く。
-
-\verb|\begin{tabular}{l|{\tt \textbar}{\tt c}{\tt \textbar}\verb|r}|で横方向のセルを指定する。{\tt c}は中央揃え、{\tt l}は左揃え、{\tt r}は右揃えのセルを作る。{\tt \textbar}は垂直方向の罫線を表す。{\tt c}か{\tt l}か{\tt r}を必要なセルの数だけ並べて、セルの間に罫線が必要なら{\tt \textbar}を入れればよい。
-
-セルの中の文字は、{\tt \&}で区切って並べる。行と行は \verb|\\| で区切る。水平方向の罫線が必要なら、\verb|\hline| を書く。
-
-水平方向や垂直方向のセルの結合もできる。例を示すので、くわしくはぐぐろう。説明がめんどう。\verb|\multirow|、\verb|\multicolumn|、\verb|\cline| を使うとできる。
-
-\begin{table}[htbp]
-  \caption{セルを結合した例}
-  \label{tb:sample2}
-  \begin{center}
-  \begin{tabular}{c|c|c}
-    \hline
-    ほげ&ふー&ばー\\\hline\hline
-    \multirow{2}{*}{ほげほげ}&\multicolumn{2}{c}{ふーふー} \\\cline{2-3}
-    &ふーふーふー&ばーばーばー\\\hline
-  \end{tabular}
-  \end{center}
-\end{table}
-
-\begin{itembox}[l]{{\tt 03.tex}}
-\begin{verbatim}
-\begin{table}[htbp]
-  \caption{セルを結合した例}
-  \label{tb:sample2}
-  \begin{center}
-  \begin{tabular}{c|c|c}
-    \hline
-    ほげ&ふー&ばー\\\hline\hline
-    \multirow{2}{*}{ほげほげ}&\multicolumn{2}{c}{ふーふー} \\\cline{2-3}
-    &ふーふーふー&ばーばーばー\\\hline
-  \end{tabular}
-  \end{center}
-\end{table}
-\end{verbatim}
-\end{itembox}
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{images/editedabc.png}
+\caption{編集後の楽譜}
+\label{editedabc}
+\end{figure}
 
 
-\subsection{脚注}
+\paragraph*{音符など以外の情報を書く}
+楽譜領域以外では標準のScrapbox記法を利用できるので、自在にテキストを書いたり、マルチメディアを埋め込むことができる(図\ref{scoreandtext})。
 
-脚注は \verb|\footnote| コマンドを使う。例えばこんな感じ\footnote{ページの下に小さく説明を出せる}。
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{images/scoreandtext.png}
+\caption{楽譜にテキストや動画が埋め込まれた例}
+\label{scoreandtext}
+\end{figure}
 
-\begin{itembox}[l]{{\tt 03.tex}}
-\begin{verbatim}
-例えばこんな感じ\footnote{ページの下に小さく説明を出せる}。
-\end{verbatim}
-\end{itembox}
 
-\section{その他のコマンド}
+\paragraph*{ハイパーリンクを利用する}
+ABCには無い独自の機能として音符ハイパーリンク機能を利用できる。
+ABCの末尾に\texttt{\%Links:[リンク1][リンク2]…}と記述することで対象となる音符にハイパーリンクを設定できる。
+具体的な設定方法とその例を図\ref{linkabc}に示す。
+ハイパーリンクが設定された音符は青く表示され(図\ref{linkednote})、クリックするとリンク先のページへ遷移する(図\ref{middlec})。
 
-ぐぐる\footnote{http://www.google.co.jp/}。
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{images/linkabc.png}
+\caption{1音目の「C」に「middle C」ページへのリンクが設定されたABC}
+\label{linkabc}
+\end{figure}
 
-特殊なことは何もしていないテンプレートなので、ぐぐって出たことはだいたいそのまま何でも使える。
+\begin{figure}[H]
+\centering
+\includegraphics[width=4cm]{images/linkednote.png}
+\caption{ハイパーリンクが設定された音符}
+\label{linkednote}
+\end{figure}
 
-あるいは、このファイル自体も\LaTeX で書かれているわけだから、これの{\tt *.tex}を見るのもよいかもしれない。
-
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{images/middlec.png}
+\caption{リンク先の「middle C」ページ}
+\label{middlec}
+\end{figure}
 

@@ -1,376 +1,181 @@
-\chapter{本テンプレートの使い方}
-\label{chap:howto}
-
-本章では、本テンプレートの具体的な使用方法を解説する。基本的には、{\tt main.tex} を上から順に修正していけばよいだけ。 
-
-
-\section{テンプレートの構成}
-
-このテンプレートは、表\ref{tb:files}のファイルで構成されている。
-
-\begin{table}[htbp]
-  \caption{構成ファイル}
-  \label{tb:files}
-  \begin{center}\begin{tabular}{c|l}
-    \hline
-    ファイル名&用途\\\hline\hline
-    {\tt main.tex}&メインのファイル。これを編集していく\\\hline
-    {\tt thesis.sty}&論文のスタイルを定義したファイル。基本的には手は加えない\\\hline
-    {\tt *.tex}&{\tt main.tex}に{\tt include}されるファイル群\\\hline
-    {\tt *.eps}&画像ファイル\\\hline
-    {\tt main.bib}&参考文献用のBibTeXファイル\\\hline
-    {\tt Makefile}&Makefile。次節以降で説明\\\hline
-    {\tt .gitignore}&Git用設定ファイル\\\hline
-  \end{tabular}\end{center}
-\end{table}
-
-\section{コンパイル}
-このテンプレートの\LaTeX ファイルをコンパイルしてPDFファイルを生成するには、ターミナルを開いて以下のようにする。
-
-\begin{itembox}[l]{コマンド実行例}
-\begin{verbatim}
-% make
-\end{verbatim}
-\end{itembox}
-
-こうすることで、\verb|platex|コマンド、\verb|pbibtex|コマンド、\verb|platex|コマンド2回、\verb|dvipdfmx|コマンドが全て実行され、{\tt main.pdf}が生成される。
-
-コンパイルによって生成されたファイルを全て消すには、以下のようにする。
-
-\begin{itembox}[l]{コマンド実行例}
-\begin{verbatim}
-% make clean
-\end{verbatim}
-\end{itembox}
-
-\section{設定}
-
-以下、{\tt main.tex}に対して行うべき設定を、このファイルの中に書いてある順に沿って説明する。
-
-\subsection{論文全体の言語の設定}
-\label{sec:lang}
-
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-\japanesetrue	% 論文全体を日本語で書く（英語で書くならコメントアウト）
-\end{verbatim}
-\end{itembox}
-
-ここでは論文全体の言語を設定する。日本語に設定すれば、『章』『目次』『謝辞』などが日本語で出力されて、行頭のインデントなども日本語の仕様になる。英語にした場合は、これらはそれぞれ『Chapter』『Table of Contents』『Acknowledgment』な体裁になる。インデントも行間も、英語用の設定が適用される。
-
-\verb|\japanesetrue| をコメントアウトしなければ日本語に、コメントアウトすれば英語に設定される。
-
-
-\subsection{余白の設定}
-
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-\bindermode	% バインダ用余白設定
-\end{verbatim}
-\end{itembox}
-
-このテンプレートの出力はA4用紙。ここではこれの四辺の余白を設定する。
-
-最終的にバインダーで綴じて提出する場合、余白を左右対称にしてしまうと、見かけ上のバランスがとても悪くなる。これを解消するため、あらかじめ左側の余白を大きく取っておく。
-
-\verb|\bindermode| をコメントアウトしなければ左綴じ用の余白に、コメントアウトすれば左右対称の余白に設定される。
-
-両面印刷の場合、偶数ページと奇数ページで余白を広くとるべき側が違うので、\verb|documentclass| でこれを設定する。
-
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-% 両面印刷の場合。余白を綴じ側に作って右起こし。
-\documentclass[a4j,twoside,openright,11pt]{jreport}
-% 片面印刷の場合。
-%\documentclass[a4j,11pt]{jreport}
-\end{verbatim}
-\end{itembox}
-
-両面印刷の場合は \verb|twoside| を使用する。\verb|openright| を使うと章のはじまりが必ず右側のページに来るようになる。
-
-\subsection{論文情報の設定}
-\label{sec:meta}
-
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-% 日本語情報（必要なら）
-\jclass  {修士論文}                             % 論文種別
-\jtitle    {修士論文用 \LaTeX\ テンプレート}    % タイトル。改行する場合は\\を入れる
-\juniv    {慶應義塾大学大学院}                  % 大学名
-\jfaculty  {政策・メディア研究科}               % 学部、学科
-\jauthor  {ほげ山 ふう助}                       % 著者
-\jhyear  {24}                                   % 平成○年度
-\jsyear  {2012}                                 % 西暦○年度
-\jkeyword  {\LaTeX、テンプレート、修士論文}     % 論文のキーワード
-\jproject{インタラクションデザインプロジェクト} %プロジェクト名
-\jdate{2013年1月}
-
-% 英語情報（必要なら）
-\eclass  {Master's Thesis}                            % 論文種別
-\etitle    {A \LaTeX Template for Master Thesis}      % タイトル。改行する場合は\\を入れる
-\euniv  {Keio University}                             % 大学名
-\efaculty  {Graduate School of Media and Governance}  % 学部、学科
-\eauthor  {Fusuke Hogeyama}                           % 著者
-\eyear  {2012}                                        % 西暦○年度
-\ekeyword  {\LaTeX, Templete, Master Thesis}          % 論文のキーワード
-\eproject{Interaction Design Project}                 %プロジェクト名
-\edate{January 2013}
-\end{verbatim}
-\end{itembox}
-
-ここでは論文のタイトルや著者の氏名などのメタデータを記述する。ここで書いたデータは、表紙とアブストラクトのページに使われる。必ずしも日本語と英語の両方を設定しなければいけないわけではなくて、自分が必要とする方だけ記述すればよい。
-
-タイトルが長過ぎる場合は、表紙やアブストラクトのページでは自動で折り返して出力される。もし改行位置を自分で指定したい場合は、その場所に \verb|\\| を入力する。
-
-
-\section{出力}
-
-\verb|\begin{document}| から \verb|\end{document}| に記述した部分が、実際に{\tt DVI}（最終的には{\tt PDF}）ファイルとして出力される。
-
-\subsection{外部ファイルの読み込み（{\tt include}）}
-
-出力部分の具体的な説明の前に、外部ファイルを読み込む方法を説明する。
-
-\verb|\begin{document}| から \verb|\end{document}| の間では、\verb|\include| コマンドを使うことで、別の {\tt *.tex} ファイルを読み込ませられる。 
-
-\begin{itembox}[l]{{\tt include}しない場合}
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-\begin{document}
-  \begin{jabstract}
-  ほげほげ
-  \end{jabstract}
-\end{document}
-\end{verbatim}
-\end{itembox}
-\end{itembox}
-
-\begin{itembox}[l]{{\tt include}する場合}
-\begin{minipage}{0.5\hsize}
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-\begin{document}
-\include{01} % 01.texをinclude
-\end{document}
-\end{verbatim}
-\end{itembox}
-\end{minipage}
-\begin{minipage}{0.5\hsize}
-\begin{itembox}[l]{{\tt 01.tex}}
-\begin{verbatim}
-\begin{jabstract}
-ほげほげ
-\end{jabstract}
-\end{verbatim}
-\end{itembox}
-\end{minipage}
-\end{itembox}
-
-{\tt include}しない場合とする場合を比較するとこのとおり。どちらも出力結果は一緒。{\tt include}する場合は、読み込ませたい箇所に、読み込ませたい{\tt *.tex}ファイルの名前を、拡張子を除いて \verb|\include| コマンドで書けばよい。
-
-\verb|\include| コマンドを用いるか用いないかは、たぶん文書量や個人の好みに依る。例えば章ごとに別のファイルにしておけば、修正箇所を探すときの手間が多少は省けるかもしれない。Gitで人と共有しつつ校正を頼むときにもファイルが分かれていたほうがコンフリクトを起こしにくい。
-
-
-\subsection{表紙の出力}
-
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-\ifjapanese
-  \jmaketitle    % 表紙（日本語）
-\else
-  \emaketitle    % 表紙（英語）
-\fi
-\end{verbatim}
-\end{itembox}
-
-最初に、表紙を出力する。
-
-\verb|\jmaketitle| が実行されると日本語の表紙が、\verb|\emaketitle| が実行されると英語の表紙がそれぞれ出力される。日本語の表紙には、第\ref{sec:meta}節で設定したうちの日本語の情報が、英語の表紙には同節で設定したうち英語の情報が、それぞれ参照されて、表記される。
-
-デフォルトでは第\ref{sec:lang}説で設定した言語の表紙のみが出力されるようになっている。
-
-\subsection{アブストラクトの出力}
-
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-\include{00_abstract}	% アブストラクト。要独自コマンド、include先参照のこと
-\end{verbatim}
-\end{itembox}
-
-表紙の次は、アブストラクト。
-
-アブストラクトを出力するには、出力したい位置に、指定のコマンドを用いて文章を書き下せばよい。{\tt main.tex}に直接書いてもよいし、先述した \verb|\include| コマンドを利用して{\tt include}してもよい。
-
-\verb|\begin{jabstract}| から \verb|\end{jabstract}| の間に書いた文章が日本語のアブストラクトとして、\verb|\begin{eabstract}| から \verb|\end{eabstract}| の間に書いた文章が英語のアブストラクトとして、それぞれ独立したページに出力される。
-
-アブストラクトのページには、論文のタイトルやキーワードなどが、第\ref{sec:meta}節で設定した情報をもとにして自動で表記される。
-
-日本語か英語のどちらか一方のみでよい場合は、不要な言語の方のコマンドを削除すればよい。これは、\verb|\begin| と \verb|\end| というコマンド自身も含めて削除する、ということで、\verb|\begin| と \verb|\end| の間を空っぽにするという意味ではないので注意。
-
-
-
-\subsection{目次類の出力}
-\label{sec:toc}
-
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-\tableofcontents	% 目次
-\listoffigures		% 表目次
-\listoftables		% 図目次
-\end{verbatim}
-\end{itembox}
-
-アブストラクトの次に、目次。文書の目次、図の目次、表の目次の三種類。
-
-目次類を出力するには、出力したい位置に指定のコマンドを書けばよい。
-
-これらのコマンドは、コンパイル時点での一時ファイル\footnote{{\tt *.toc}、{\tt *.lof}、{\tt *.lot}}の情報を、目次として体裁を整えて出力するもの。一時ファイルは、\verb|\begin{document}| から \verb|\end{document}| の間の章や節、図や表をコンパイルするときに、ついでに情報を取得しておいて生成される。
-
-つまり気をつけなければいけないのは、コンパイルを一回しただけでは、一時ファイルが最新の状態に更新されるだけで、肝心の目次は正しい情報では出力されないということ。目次類を正しい情報で出力するには、最低二回のコンパイルが必要。一回目のコンパイルで一時ファイルが最新の情報に更新されて、二回目のコンパイルで初めて、その最新の一時ファイルの情報をもとに目次が出力される。
-
-だから、文書に何らかの修正をして保存したあとは、最低でも二回、連続してコンパイルしないといけないことに注意する。
-
-図や表を一つも使用していない場合は、目次名のみが書かれた空白のページが出力される。もしこれが不要な場合は、該当するコマンドをコメントアウトすればよい。
-
-
-\subsection{本文の出力}
-
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-\include{01}	% 本文1
-\include{02}	% 本文2
-\include{03}	% 本文3
-\include{04}	% 本文4
-\end{verbatim}
-\end{itembox}
-
-目次に続いて、論文のメイン、本文を記述する。アブストラクトと同様で、{\tt main.tex}に直接書くか、\verb|\include| コマンドを利用して別に用意したファイルを{\tt include}する。
-
-本文の書き方は、第\ref{chap:latex}章で詳しく説明する。
-
-
-\subsection{謝辞の出力}
-
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-\include{90_acknowledgment}	% 謝辞。要独自コマンド、include先参照のこと
-\end{verbatim}
-\end{itembox}
-
-本文のあとには、謝辞を出力する。\verb|begin{acknowledgment}| から \verb|end{acknowledgment}| の間に書いた文章が、謝辞として独立したページに出力される。アブストラクトや本文と同じで、{\tt main.tex}に直接書いてもよいし、\verb|\include| コマンドを利用して{\tt include}してもよい。
-
-
-\subsection{参考文献の出力}
-
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-\include{91_bibliography}	% 参考文献。要独自コマンド、include先参照のこと
-\end{verbatim}
-\end{itembox}
-
-謝辞に続いて、参考文献を出力する。
-
-参考文献リストは、\verb|\begin{bib}| から \verb|\end{bib}| の間に、\verb|\bibitem| コマンドを使って書く。
-
-BibTeXを使う場合は、以下のようにする。
-
-\begin{itembox}[l]{{\tt 91\_bibliography.tex}}
-\begin{verbatim}
-\begin{bib}[100]
-\bibliography{main}
-\end{bib}
-\end{verbatim}
-\end{itembox}
-
-こうすると、\verb|main.bib|から使用した参考文献のみを抽出して出力してくれる。\verb|main.bib|の中身は以下のようになっていて、気の利いた論文検索サイトであればBibTeXをコピペできるようになっているので簡単に作れるはず。
-
-
-\begin{itembox}[l]{{\tt 91\_bibliography.tex}}
-\begin{verbatim}
-@article{hoge09,
-    author  = "ほげ山太郎 and ほげ山次郎",
-    yomi    = "ほげやまたろう",
-    title   = "ほげほげ理論のHCI分野への応用",
-    journal = "ほげほげ学会論文誌",
-    volume  = "31",
-    number  = "3",
-    pages   = "194-201",
-    year    = "2009",
-}
-@inproceedings{hoge08,
-    author     = "Taro Hogeyama and Jiro Hogeyama",
-    title      = "The Theory of Hoge",
-    booktitle  = "The Proceedings of The Hoge Society",
-    year       = "2008"
-}
-\end{verbatim}
-\end{itembox}
-
-
-以下は、BibTeXを使わないで手で書く例。
-
-\begin{itembox}[l]{{\tt 91\_bibliography.tex}}
-\begin{verbatim}
-@article{hoge09,
-    author  = "ほげ山太郎 and ほげ山次郎",
-    yomi    = "ほげやまたろう",
-    title   = "ほげほげ理論のHCI分野への応用",
-    journal = "ほげほげ学会論文誌",
-    volume  = "31",
-    number  = "3",
-    pages   = "194-201",
-    year    = "2009",
-}
-@inproceedings{hoge08,
-    author     = "Taro Hogeyama and Jiro Hogeyama",
-    title      = "The Theory of Hoge",
-    booktitle  = "The Proceedings of The Hoge Society",
-    year       = "2008"
-}
-\end{verbatim}
-\end{itembox}
-
-
-英語の文献の場合、慣例的に書誌名をイタリック体にすることが多いらしい。
-
-\begin{itembox}[l]{{\tt 91\_bibliography.tex}}
-\begin{verbatim}
-\begin{bib}[100]
-\begin{thebibliography}{#1}
-% \bibitem{参照用名称}
-%   著者名： 
-%   \newblock 文献名，
-%   \newblock 書誌情報，出版年．
-
-\bibitem{hoge09}
-  ほげ山太郎，ほげ山次郎：
-  \newblock ほげほげ理論のHCI分野への応用，
-  \newblock ほげほげ学会論文誌，Vol.31，No.3，pp.194-201，2009．
-
-\bibitem{hoge08}
-  Taro Hogeyama, Jiro Hogeyama:
-  \newblock The Theory of Hoge,
-  \newblock {\it The Proceedings of The Hoge Society}, 2008.
-\end{thebibliography}
-\end{bib}
-\end{verbatim}
-\end{itembox}
-
-\verb|\bibitem| コマンド中、参照用名称は、本文から参考文献を参照するときに使うので、忘れずに書いておく。参照文献を本文中に参照するときには、\verb|\cite{参照用名称}| のように書けばよい。例えば、この文の末尾には \verb|\cite{hoge09}| と書いてあるので、自動で対応する番号が振られる\cite{hoge09}\cite{hoge08}。
-
-参考文献リストの番号付けと、本文で参照したときの番号の挿入は、全部が自動で行われる。ただしこれも、第\ref{sec:toc}節で説明した目次の出力と同じで、一時ファイルを生成してからの挿入なので、正しく出力するには最低でも二回のコンパイルが必要。BibTeXを使用する場合は、\verb|platex|コマンドのあと\verb|pbibtex|コマンドを実行し、さらに2回\verb|platex|コマンドを実行するといいらしい。
-
-
-
-\subsection{付録の出力}
-
-\begin{itembox}[l]{{\tt main.tex}}
-\begin{verbatim}
-\appendix
-\include{92_appendix}		% 付録
-\end{verbatim}
-\end{itembox}
-
-必要であれば、論文の最後には付録を出力する。
-
-\verb|\appendix| コマンド以降に書いたものは、すべて付録として扱われる。付録部分の書き方は通常の本文とまったく同じで、\verb|\appendix| コマンド以降に書くだけで勝手に付録用の体裁で出力される。
+\chapter{研究背景}
+\label{chap:haikei}
+
+本章では楽譜の問題点と、楽譜を扱う既存システムの現状を整理する。
+
+\newpage
+
+\section{楽譜}
+
+楽譜は楽曲を記号や文字によって書き表したものである。
+一般に五線譜のことを指すことが多いが、ギター演奏用に利用されるタブ譜や日本固有の三味線譜など、用途やジャンル、地域によって様々な種類の楽譜が存在する。
+西洋音楽をルーツに持つ五線譜は国際的かつ普遍的なものとして認められており、現在は様々な音楽を記録するために広く利用されている。
+
+\section{楽譜の歴史}
+
+本節では今日利用されている楽譜が生まれるまでの進化の歴史を概観する\cite{Minagawa}。
+
+\subsection{ネウマ譜}
+ネウマ譜(図\ref{neume})は旋律の上行下行の動きをネウマと呼ばれる線状の記号で表示する記譜法で、9世紀頃から中世キリスト教会の典礼音楽であったグレゴリオ聖歌の記譜のために用いられはじめた。
+10-11世紀ごろからは横線(譜線)を添えて、音程関係を明確にする試みが行われた。
+譜線が添えられている限りは音高が明確だが、リズムの表示はあいまいである。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=7cm]{images/neume.png}
+    \caption{ネウマ譜の例}
+    \label{neume}
+\end{figure}
+
+\subsection{定量譜}
+複数の奏者がそれぞれ異なった声部を同時に演奏する多声音楽が生まれると、リズム表示があいまいな従来のネウマ譜では不十分となった。
+13世紀後半になると、音の長短を音符の形状で区別する定量譜(図\ref{teiryo})が利用されるようになった。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=9cm]{images/teiryo.png}
+    \caption{定量譜の例}
+    \label{teiryo}
+\end{figure}
+
+\subsection{奏法譜}
+15世紀ごろからは特定の楽器の演奏法を具体的に表示する奏法譜(図\ref{tab})も広く利用された。
+楽器ごとに固有の奏法譜をもち、現代でも「タブ譜」としてギター演奏に利用されている。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{images/tab.png}
+    \caption{奏法譜の例}
+    \label{tab}
+\end{figure}
+
+\subsection{近代譜}
+17世紀初頭から現在までに世界で最も普及している楽譜の形態(図\ref{kindai})で、鍵盤楽器用の奏法譜をルーツに持つ。
+\begin{itemize}
+    \item 五線による音高表示
+    \item 音符の「はた」によるリズム表示
+    \item 小節線の使用
+\end{itemize}といった特徴がある。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=9cm]{images/kindai.png}
+    \caption{近代譜の例}
+    \label{kindai}
+\end{figure}
+
+\subsection{現代音楽}
+五線譜は鍵盤楽器をベースにした西洋音楽に最適化された記譜法のため、半音以下の繊細な音程のゆれや微妙なニュアンスを表現できないという制約がある。
+現代の作曲家たちはそれぞれ独自の方法で克服しようと試みている(図\ref{kondo})。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=9cm]{images/kondo.png}
+    \caption{現代音楽譜の例}
+    \label{kondo}
+\end{figure}
+
+\section{テキストの進化}
+楽譜同様に紙の上で利用されていたテキストの進化にも注目する。
+計算機が普及する以前のテキストは印刷物であるという制約から以下のような問題が存在した。
+\begin{itemize}
+    \item 簡単に編集できない
+    \item せいぜい挿絵や写真程度の情報しか一緒に記録できない
+    \item ドキュメントが複数存在するとき参照や管理が面倒
+\end{itemize}
+
+しかし現在では計算機の進化によりこれらの問題は完全に解決されている。
+\begin{itemize}
+    \item 手軽な編集\\
+    計算機上でテキストを扱えるようになり、コピー/ペースト/Undo/Redoといったテキスト編集支援機能を搭載した各種エディタによって手軽な編集が可能になった。
+    また印刷レイアウトを簡単に構成できるワープロソフトによって、美しいレイアウトの文章を簡単に作れるようになった。
+    \item 手軽な入力\\
+    日本語入力などの文字変換をサポートするシステム(IME)などによって手軽な入力が可能になった。
+    \item マルチメディアの活用\\
+    画像/音声/動画といったマルチメディアを自在に埋め込むことができるハイパーテキスト(図\ref{hy})によって、情報量の多いドキュメントの作成が可能になった。
+    \item ハイパーリンク\\
+    ハイパーテキストでは文章間リンクを示すハイパーリンク機能が利用でき、関連情報への素早いアクセスが可能になった。
+    \item Web\\
+    インターネット技術の進化とWebの普及によって、世界中に存在する様々なドキュメントへ瞬時にアクセスすることが可能になった。
+    \item 共同編集\\
+    Wikiのようなコラボレーションツールによって、場所や人数に制約を受けない共同編集が可能になった。
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \fbox{\includegraphics[width=9cm]{images/wikipedia.png}}
+    \caption{ハイパーテキストの例}
+    \label{hy}
+\end{figure}
+
+\section{楽譜の問題点}
+\label{mondai}
+一方、楽譜の性質は計算機の普及後も印刷物の時代から進化しておらず、以下のような問題が存在する。
+\begin{enumerate}
+    \item 簡単に編集できない\\
+    現在流通している楽譜は紙やPDF形式での配布が一般的であり、内容の変更は前提とされていない。
+    また自分で楽譜を書く場合は楽譜作成ソフトを利用できるが、印刷を前提としたレイアウトでの編集を強制されるため、一部だけアレンジしたい・1フレーズだけメモしたいといった用途には向いていない。
+    \item メモなどの情報を自在に書けない\\
+    楽譜を利用する際には、
+    \begin{itemize}
+        \item 演奏時に気付いたこと
+        \item 演奏時に気をつけるべきこと
+        \item 先生に習ったこと
+    \end{itemize}などのメモを書き込みながら使うのが一般的である(図\ref{memo})。
+    メモ書きできるのは余白スペースだけであり、楽譜自体に編集を加えてレイアウトを変更したり、音声や動画といった文字以外の情報を埋め込むことも不可能なので、記述できる内容は必然的に限られる。
+    \item 参照や管理が面倒\\
+    紙やPDFはそれぞれが独立しているため、手元の楽譜が増えると管理に苦労する。
+    ファイル名でしか楽譜の内容を判断できないため、作曲者別にフォルダを分割するといったファイルの階層的な整理が必要である。
+    また楽器構成や年代といった別の側面から参照したい場合には別途索引を用意しなければならない。
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \fbox{\includegraphics[width=10cm]{images/fuga.png}}
+    \caption{楽譜上のメモの例}
+    \label{memo}
+\end{figure}
+
+\section{既存の楽譜システム}
+現在広く利用されている楽譜利用システムを解説する。
+\subsection{楽譜作成ソフト}
+Finale\footnote{\textsf{https://www.finalemusic.jp/}}(図\ref{finale})、Sibelius\footnote{\textsf{http://www.sibelius.jp/}}といった楽譜作成ソフトがデファクトスタンダードとして商用・私用問わず広く利用されている。
+スタンプ感覚で音符を入力できるWYSIWYGな編集環境を持ち、以下のような楽譜作成支援機能を利用できる。
+\begin{itemize}
+    \item 楽譜スキャン・OCR
+    \item パート譜自動作成
+    \item レイアウトの細かい微調整
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{images/finale.png}
+    \caption{Finaleの画面}
+    \label{finale}
+\end{figure}
+
+\subsection{楽譜ビューアー}
+ほとんどの楽譜はPDFファイルとして配布されるため、閲覧のために標準のPDFビューアーが利用されることが多い。
+またPiascore\footnote{\textsf{http://piascore.com/}}(図\ref{pia})を代表とするタブレット端末向けの楽譜に特化したビューアーも広く普及しており、
+\begin{itemize}
+    \item 楽譜への書き込み
+    \item 自動譜めくり
+    \item メトロノーム
+\end{itemize}といった機能を利用できる。
+
+\begin{figure}[H]
+    \centering
+    \fbox{\includegraphics[width=8cm]{images/piascore.png}}
+    \caption{Piascoreの画面}
+    \label{pia}
+\end{figure}
+
+\section{まとめ}
+楽譜の編集や閲覧を支援するシステムが広く利用されているが、これらは計算機上で楽譜の利用形態を再現したに過ぎず、
+\begin{enumerate}
+    \item 簡単に編集できない
+    \item メモなどの情報を自在に書けない
+    \item 参照や管理が面倒
+\end{enumerate}という本質的な楽譜の問題は解決されていない。
+次章では上記のような楽譜が持つ問題点を解決し、これまでの楽譜の在り方にとらわれない次世代の楽譜システム「ハイパー楽譜システム」を提案する。

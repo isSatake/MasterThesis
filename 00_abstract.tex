@@ -1,4 +1,4 @@
-ｔ% ■ アブストラクトの出力 ■
+% ■ アブストラクトの出力 ■
 %	◆書式：
 %		begin{jabstract}〜end{jabstract}	：日本語のアブストラクト
 %		begin{eabstract}〜end{eabstract}	：英語のアブストラクト
@@ -8,14 +8,13 @@
 
 % 日本語のアブストラクト
 \begin{jabstract}
+    楽譜を簡単に編集したりメモなどの情報を自在に書いたりハイパーリンクを利用したりできる「ハイパー楽譜システム」を提案する。
+    昔から広く使われている楽譜は紙を前提とした静的なメディアであり、(1)簡単に編集できない、(2)メモなどの情報を自在に書けない、(3)参照や管理が面倒、という問題が存在する。
+    計算機上の楽譜ビューアーや楽譜作成システムが広く利用されているが、これらは紙での楽譜の利用形態を再現したに過ぎず、この問題を解決できていない。
 
-テンプレートの説明を、テンプレート自身を使って説明する。これは @kurokobo による卒業論文のための\LaTeX テンプレートを修士論文用に改造し、さらにUTF-8化やMakefile等の添付をしたものである。
-
-この部分には一般には論文のアブストラクトを書く。日本語のアブストラクトを書きたいなら、\verb|\begin{jabstract}| と \verb|\end{jabstract}| の間に文章を書けば、今のこのページのように体裁が勝手に整って出力される。英語のアブストラクトは \verb|\begin{eabstract}| と \verb|\end{eabstract}| の間に書けば、次ページのような体裁で出力される。
-
-両方を書けば、日本語と英語の両方のアブストラクトが並んで出力される（この文書はサンブルなので両方書いてある）。ページ順序は、コマンドを書いた順序の通り。どちらか一方のみを出力したい場合は、不要な方をコマンド自体を含め削除する。
-
-このあたりの詳細もあとで書く。基本的には、{\tt main.tex}を上から順にいじっていけばできるはず。
+    「ハイパー楽譜システム」はWikiと楽譜記述言語の組み合わせによってテキストベースで簡単に楽譜を書いたり、自在にテキストやマルチメディアを埋め込んだり、ハイパーリンクを使って関連する楽譜や情報を簡単に参照できるシステムである。
+    これによって既存の楽譜の問題点が解決されるだけでなく、新しい楽譜の使い方が可能になる。
+    本論文では「ハイパー楽譜システム」の設計や実装、その応用例について述べ、研究の発展性について考察する。
 
 \end{jabstract}
 
@@ -24,14 +23,12 @@
 % 英語のアブストラクト
 \begin{eabstract}
 
-Eigo ga dekinai node Roma-ji de soreppoi hunniki wo daseruto iina.
-
-Murippoi desu ne.
-
-Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here.
-
- Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here. Write down your abstract here.
- 
-Write down your abstract here. Write down your abstract here.
+    We propose a new music score system "HyperScore."
+    Using HyperScore, users can quickly write music scores including text, multimedia, Hypertext, etc.
+    Since the music score is printed matter, there are problems such that it cannot be edited, hard to add information other than musical notes, and difficulty of organizing.
+    Although music score viewers and music notation systems are getting popular these days, they cannot solve those problems because such systems merely reproduce the form of the music score on the computer.
+    HyperScore solves problems on the music score with Wiki and musical notation language.
+    Using HyperScore, users can write music scores easily with text, embed any information including multimedia, access to related music scores or other information via Hyperlink.
+    In this paper, we describe the design, implementation, and application of HyperScore.
 
 \end{eabstract}
