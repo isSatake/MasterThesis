@@ -3,7 +3,7 @@ Master Thesis
 
 最新版PDF
 -----
-https://stkay.github.io/MasterThesis/main.pdf
+https://issatake.github.io/MasterThesis/main.pdf
 
 PDFの生成
 -----
